@@ -4,7 +4,7 @@
 library geofire;
 
 import 'dart:async';
-import 'dart:collection'; 
+import 'dart:collection';
 
 import 'package:flutter/services.dart';
 
@@ -14,7 +14,7 @@ part 'eventlistener.dart';
 part 'error.dart';
 
 /// A class that allows for storing and receiving geo location data from a Firebase Database.
-/// 
+///
 /// Every Geofire instance needs a path to the desired location in the database.
 class GeoFire {
     static const MethodChannel _channel = const MethodChannel('com.bram.vanbilsen.geofire.GeoFire');
@@ -39,7 +39,7 @@ class GeoFire {
     }
 
     /// Associates the key with the provided location in the database.
-    /// 
+    ///
     /// The location argument should be a `List<double>` with two values. The first one being the latitude and the second one being the longitude.
     /// An optional `GeoFireEventListener` can be provided.
     /// Throws an `ArgumentError` if the location argument is not in the correct format.
@@ -55,7 +55,7 @@ class GeoFire {
             <String, String>{
                 "name": _channel.name + ".setLocationListener." + uuid
             }
-        ).then((String result) {
+        ).then((dynamic result) {
             _setLocationListenerChannel = new MethodChannel(_channel.name + ".setLocationListener." + uuid);
             _setLocationListenerChannel.setMethodCallHandler((MethodCall call) {
                 if (call.method == "setLocationSuccess") {
@@ -87,7 +87,7 @@ class GeoFire {
     }
 
     /// Removes location from database with provided key.
-    /// 
+    ///
     /// An optional `GeoFireEventListener` can be provided.
     void removeLocation(String key, [GeoFireEventListener listener]) {
 
@@ -98,7 +98,7 @@ class GeoFire {
             <String, String>{
                 "name": _channel.name + ".removeLocationListener." + uuid
             }
-        ).then((String result) {
+        ).then((dynamic result) {
             _removeLocationListenerChannel = new MethodChannel(_channel.name + ".removeLocationListener." + uuid);
             _removeLocationListenerChannel.setMethodCallHandler((MethodCall call) {
                 if (call.method == "removeLocationSuccess") {
@@ -130,7 +130,7 @@ class GeoFire {
     }
 
     /// Gets the location from the database with the provided key.
-    /// 
+    ///
     /// A `LocationCallBack` is required to listen for completion of the function.
     void getLocation(String key, LocationCallBack callback) {
 
@@ -141,7 +141,7 @@ class GeoFire {
             <String, String>{
                 "name": _channel.name + ".getLocationListener." + uuid
             }
-        ).then((String result) {
+        ).then((dynamic result) {
             _getLocationListenerChannel = new MethodChannel(_channel.name + ".getLocationListener." + uuid);
             _getLocationListenerChannel.setMethodCallHandler((MethodCall call) {
                 if (call.method == "getLocationSuccess") {
@@ -164,7 +164,7 @@ class GeoFire {
     }
 
     /// Crates a new `GeoQuery` with the provided information.
-    /// 
+    ///
     /// Throws an `ArgumentError` if the location argument is not in the correct format.
     GeoQuery queryAtLocation(List<double> center, double radius) {
         if (center.length != 2) {
@@ -178,7 +178,7 @@ class GeoFire {
 }
 
 /// A class that allows for performing location queries on a Firebase database.
-/// 
+///
 /// This class needs a `GeoFire` reference to get the database path from.
 class GeoQuery {
     static const MethodChannel _channel = const MethodChannel('com.bram.vanbilsen.geofire.GeoFire');
@@ -190,7 +190,7 @@ class GeoQuery {
     HashMap<GeoQueryEventListener, MethodChannel> _listenerChannels = new HashMap<GeoQueryEventListener, MethodChannel>();
 
     /// Creates new `GeoQuery` instance.
-    /// 
+    ///
     /// The center argument should be a `List<double>` with two values. The first one being the latitude and the second one being the longitude.
     /// Throws an `ArgumentError` if the center argument is not in the correct format.
     GeoQuery(List<double> center, double radius, GeoFire geofire) {
@@ -274,7 +274,7 @@ class GeoQuery {
     }
 
     /// Adds new `GeoQueryEventListener` to this query.
-    /// 
+    ///
     /// Throws `ArgumentError` if you are attempting to add the same listener twice.
     void addGeoQueryEventListener(GeoQueryEventListener listener) {
         if (_listenerChannels.containsKey(listener)) {
@@ -292,7 +292,7 @@ class GeoQuery {
             <String, String> {
                 "name": channelName
             }
-        ).then((String result) {
+        ).then((dynamic result) {
             _setMethodCallHandlerListener(listener, listenerChannel);
 
             listenerChannel.invokeMethod(
@@ -317,7 +317,7 @@ class GeoQuery {
     }
 
     /// Removes provided listener from this query.
-    /// 
+    ///
     /// Future will cary true if the listener got removed correctly.
     Future<bool> removeGeoQueryEventListener(GeoQueryEventListener listener) {
         MethodChannel channel = _listenerChannels[listener];
