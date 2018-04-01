@@ -313,7 +313,7 @@ class GeoQuery {
         });
     }
 
-    Future<bool> _removeListener(MethodChannel channel) {
+    Future<dynamic> _removeListener(MethodChannel channel) {
         return channel.invokeMethod(
             "removeGeoQueryEventListener",
             <String, String> {
