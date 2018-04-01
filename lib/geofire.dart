@@ -250,16 +250,22 @@ class GeoQuery {
             print("LISTENER CALL:" + call.method);
             switch(call.method) {
                 case "geoQueryEventKeyEntered":
-                    Map<String, List<double>> args = call.arguments["result"];
-                    args.forEach((String key, List<double> location) => listener.onKeyEntered(key, location));
-                    break;
+                  Map<String, dynamic> args = Map.castFrom(call.arguments["result"]);
+                  args.forEach((String key, dynamic loc) {
+                    List<double> location = List.castFrom(loc);
+                    listener.onKeyEntered(key, location);
+                  });
+                  break;
                 case "geoQueryEventKeyExited":
-                    listener.onKeyExited(call.arguments["result"]);
-                    break;
+                  listener.onKeyExited(call.arguments["result"]);
+                  break;
                 case "geoQueryEventKeyMoved":
-                    Map<String, List<double>> args = call.arguments["result"];
-                    args.forEach((String key, List<double> location) => listener.onKeyMoved(key, location));
-                    break;
+                  Map<String, dynamic> args = Map.castFrom(call.arguments["result"]);
+                  args.forEach((String key, dynamic loc) {
+                    List<double> location = List.castFrom(loc);
+                    listener.onKeyMoved(key, location);
+                  });
+                  break;
                 case "geoQueryEventReady":
                     listener.onGeoQueryReady();
                     break;
